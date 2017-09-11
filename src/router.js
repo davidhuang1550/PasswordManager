@@ -1,5 +1,5 @@
 
-let _ 		     = require("C:/Users/david/Desktop/elec/src/path.js"),
+let _ 		   = require("/Users/davidhuang/Desktop/Repositories/PasswordManager/src/path.js"),
    CommonAjax  = require(_.path + 'src/CommonAjax'),
    Login       = require(_.path + 'src/login'),
    Overview    = require(_.path + 'src/overview'),

@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase-admin": "^5.2.1",
     "firebase-functions": "^0.6.0"
+  },
+  "devDependencies": {
+    "electron": "1.7.6"
   }
 }
