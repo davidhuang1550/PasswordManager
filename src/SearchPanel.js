@@ -1,5 +1,7 @@
 let PasswordInformationPanel = require(_.path + 'src/PasswordInformationPanel'),
-	Password 			     = require(_.path + 'src/models/Password');
+	Password 			     = require(_.path + 'src/models/Password'),
+	ModalBuilder			 = require(_.path + 'src/Modal/ModalBuilder'),
+	Modal                    = require(_.path + 'src/ModalNames');
 class SearchPanel{
 	constructor(input, ul , li){
 		this._input = input;
@@ -73,7 +75,8 @@ class SearchPanel{
 		// this goes here for now but should be invoked once a item is selected and should only be invoked once ine the lifespan of the program
 		let self = this,
 			inlinePromise = self.LoadPanelContent(),
-			promptForPassword = document.getElementById('promptForPassword');;
+			promptForPassword,
+ 			mBuilder = new ModalBuilder();
 
 		inlinePromise.done(function(){
 			if(self._Passwords[0] != null){
@@ -93,20 +96,21 @@ class SearchPanel{
 
 		});
 
-		$("#promptForPassword").find("#main-content-close").click(function(){
-			promptForPassword.style.display = "none";
-		});
 
 		$("#ulId").on('click','li', function(){
-			let passwordItem = self._Passwords[parseInt($(this).attr("id"))]; //gets the text value
+			let passwordItem = self._Passwords[parseInt($(this).attr("id"))],
+				inlinePromise; //gets the text value
 			if(passwordItem._secure) {
 
-				promptForPassword.style.display = "block";
-				$("#secure-content-close").click(function(){
-					promptForPassword.style.display = "none";
+				inlinePromise = mBuilder.CreateModal('promptForPassword', Modal.PromptForPassword, 'promptForPassword', _.PromptForPassword);
+				inlinePromise.done(function(result){
+					if(result !== undefined){
+						promptForPassword = result;
+						promptForPassword.ShowModal();
+					}
+				}).fail(function(){
+
 				});
-
-
 			} else {
 				self.GenerateRightSide(passwordItem);
 			}

@@ -1,5 +1,7 @@
 let GeneratePassword = require(_.path + 'src/GeneratePassword'),
-	WordGenerate     = require(_.path + 'src/WordGenerate');
+	WordGenerate     = require(_.path + 'src/WordGenerate'),
+	ModalBuilder	 = require(_.path + 'src/Modal/ModalBuilder'),
+	Modal			 = require(_.path + 'src/ModalNames');
 
 class PasswordCreationManager{
 	constructor(targetDiv){
@@ -12,9 +14,9 @@ class PasswordCreationManager{
 		this._upperCase = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 		this._symbol = ['!','@','#','$','%','^','&','*','-','+'];
 		this._number = [0,1,2,3,4,5,6,7,8,9];
-		this._errorModal = $(this._targetDiv).find('#errorModal');
 		this._targetDiv = targetDiv;
-
+		this._errorModal;
+		
 	}
 
 	set targetDiv(target){
@@ -29,7 +31,9 @@ class PasswordCreationManager{
 		let args = [],
 			counter = 0,
 			passwordLength = 0,
-			password;
+			password,
+			mBuilder,
+			self = this;
 
 		passwordLength = $(this._targetDiv).find("#passwordLength").val();
 		if($(this._targetDiv).find("#onlyEnglishWords").prop("checked")){
@@ -64,7 +68,18 @@ class PasswordCreationManager{
 				if(this._passwordCache  > 19 ) this._passwordCache.shift();
 				this._passwordCache .push(password);
 			} else {
-				this._errorModal.css("display","block")
+				let inlinePromise;
+				mBuilder = new ModalBuilder();
+				inlinePromise = mBuilder.CreateModal('errorModal', Modal.PasswordErrorModal, 'errorModal', _.PasswordErrorModal);
+				inlinePromise.done(function(result){
+					if(result !== undefined){
+						self._errorModal = result;
+						self._errorModal.InitializeListeners(self._targetDiv);
+						self._errorModal.ShowModal();
+					}
+				}).fail(function(){
+
+				});
 			}
 		}
 	}
@@ -99,30 +114,46 @@ class PasswordCreationManager{
 		$("#AdditionalInformationBtn").addClass("disabled");
 	}
 
+	PopulateHistory(){
+		let self = this;
+		for (let i = self._historyCounter ; i < self._passwordCache.length ; i++){
+			$(self._targetDiv).find("#modal-content-div").append(
+					'<div class="input-group" style="width:450px;margin-left:auto;margin-right:auto;margin-top:20px;margin-bottom:20px;">'+
+						'<input type="text" class="form-control"' +
+						'id="generatedPassword' + i + '" value = "' + self._passwordCache[i] + '"  readonly/>'+
+						'<span class="input-group-addon cache-selector" id="copy-clipboard' + i + '"><i class="fa fa-mouse-pointer" aria-hidden="true"></i></span>'+
+					'</div>');
+			self._historyCounter++;
+			$(self._targetDiv).find("#copy-clipboard"+i).click(function(){
+				self.onClickCopyCache("generatedPassword" +i);
+			});
+		}
+	}
+
 	InitializeListeners(){
-
 		let self = this,
-			historyModal = $(this._targetDiv).find('#historyModal');
+			historyModal,
+			mBuilder = new ModalBuilder();
 
 
-		$(this._targetDiv).find("#history-content-close").click(function(){
-			historyModal.css("display","none");
-		});
-		// onclick="onClickCopyCache(' + '\'generatedPassword' + i + '\')"
 		$(this._targetDiv).find("#show-history").click(function(){
-			for (let i = self._historyCounter ; i < self._passwordCache.length ; i++){
-				$(self._targetDiv).find("#modal-content-div").append(
-						'<div class="input-group" style="width:450px;margin-left:auto;margin-right:auto;margin-top:20px;margin-bottom:20px;">'+
-							'<input type="text" class="form-control"' +
-							'id="generatedPassword' + i + '" value = "' + self._passwordCache[i] + '"  readonly/>'+
-							'<span class="input-group-addon cache-selector" id="copy-clipboard' + i + '"><i class="fa fa-mouse-pointer" aria-hidden="true"></i></span>'+
-						'</div>');
-				self._historyCounter++;
-				$(self._targetDiv).find("#copy-clipboard"+i).click(function(){
-					self.onClickCopyCache("generatedPassword" +i);
+			if(historyModal !== undefined){
+				self.PopulateHistory()
+				historyModal.ShowModal();
+			} else {
+				let inlinePromise;
+				inlinePromise = mBuilder.CreateModal('historyModal', Modal.HistoryModal, 'historyModal', _.HistoryModal);
+				inlinePromise.done(function(result){
+					if(result !== undefined){
+						historyModal = result;
+						historyModal.InitializeListeners(self._targetDiv);
+						self.PopulateHistory();
+						historyModal.ShowModal();
+					}
+				}).fail(function(){
+
 				});
 			}
-			historyModal.css("display","block");
 		});
 
 		$(this._targetDiv).find("#CreatePasswordBtn").click(function(){
@@ -146,10 +177,6 @@ class PasswordCreationManager{
 
 			// After 3 seconds, remove the show class from DIV
 			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-		});
-
-		$(this._targetDiv).find("#closeError").click(function(){
-			self._errorModal.css("display","none");
 		});
 
 		$(this._targetDiv).find("#onlyEnglishWords").click(function(){

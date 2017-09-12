@@ -34,7 +34,7 @@ class Overview{
 		});
 
 		$("#add").click(function(){
-			inlinePromise = mBuilder.CreateModal('myModal',Modal.PasswordModal, 'PasswordCreationModal');
+			inlinePromise = mBuilder.CreateModal('myModal',Modal.PasswordModal, 'PasswordCreationModal', _.PasswordCreationModal);
 			inlinePromise.done(function(result){
 				self._modal = result;
 				if(self._modal !== undefined){
@@ -46,21 +46,6 @@ class Overview{
 
 			});
 		});
-		/*
-		$("#AdditionalInformationBtn").click(function(){
-			if($("#generatedPassword").val().length >0){
-				let inlinePromise = self._oAdditonalInformation.InitializeListeners();
-
-				inlinePromise.done(function(){
-						self._oPasswordCreationManager.ResetFields();
-						modalObj.HideModal();
-				}).fail(function(){
-
-				});
-			}
-		});*/
-
-
 	}
 }
 

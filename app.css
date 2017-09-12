@@ -197,8 +197,10 @@
     animation: fadein 0.2s;
 }
 
+
 .modal-content-error{
-	background-color: #fefefe;
+    background-color:#212121;
+    color:white;
     margin: 10% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;

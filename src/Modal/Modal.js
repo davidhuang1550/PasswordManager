@@ -10,7 +10,8 @@ class Modal {
           this._modal = ModalObject;
 
         } else {
-            throw new type.error("Cannot create instance of absract class");
+            console.log("cannot create Modal Object because Modal is abstract");
+
         }
         
     }
