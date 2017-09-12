@@ -54,7 +54,10 @@ class SearchPanel{
 		return inlinePromise.promise();
 		// add listeners then this should invoke the initialize listener function check if the object has been fulfilled so we only need to check once
 	}
-
+	
+	/**
+	*@param the password object 
+	*/
 	GenerateRightSide(passwordItem){
 		let inlinePromise = CommonAjax.GetPartialView(_.rightpanel);
 

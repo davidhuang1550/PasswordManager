@@ -4,7 +4,9 @@ class CommonAJax{
 	constructor(){
 		
 	}
-	
+	/**
+	*@param the path of the partialview
+	*/
 	GetPartialView(path){
 		let inlinePromise = new $.Deferred();
 		$.ajax({

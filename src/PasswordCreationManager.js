@@ -83,7 +83,10 @@ class PasswordCreationManager{
 			}
 		}
 	}
-
+	
+	/**
+	*@param the id of the cached password.
+	*/
 	onClickCopyCache(id){
 		$(this._targetDiv).find("#generatedPassword").val($(this._targetDiv).find("#"+id).val());
 		var modal = $(this._targetDiv).find('#historyModal').css("display","none");

@@ -10,7 +10,8 @@ let constants = {
 	PasswordCreationModal : proPath + 'partialviews/Modal/PasswordCreationModal.html',
 	PromptForPassword     : proPath + 'partialviews/Modal/PromptForPassword.html',
 	PasswordErrorModal    : proPath + 'partialViews/Modal/PasswordErrorModal.html',
-	HistoryModal		  : proPath + 'partialViews/Modal/HistoryModal.html'
+	HistoryModal		  : proPath + 'partialViews/Modal/HistoryModal.html',
+	LoginModal			  : proPath + 'partialViews/Modal/LoginModal.html'
 };
 
 module.exports = constants;

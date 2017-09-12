@@ -2,7 +2,8 @@ let Modal = {
     PasswordModal       : "PasswordModal",
     PromptForPassword   : "PromptForPassword",
     ErrorPasswordModal  : "ErrorPasswordModal",
-    HistoryModal        : "HistoryModal"
+    HistoryModal        : "HistoryModal",
+    LoginModal          : "LoginModal"
 };
 module.exports = Modal;
 

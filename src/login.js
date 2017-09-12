@@ -1,3 +1,5 @@
+let ModalBuilder = require(_.path + 'src/Modal/ModalBuilder'),
+	Modal		 = require(_.path + 'src/Modal/Modal');
 
 class Login{
 
@@ -13,6 +15,10 @@ class Login{
 		}
 	}
 
+	/**
+	*@param email the email address of the account
+	*@param password the password of of the account
+	*/
 	authenticate(email, password){
 		let inlinePromise = $.Deferred();
 		firebase.auth().signInWithEmailAndPassword(email, password).then(function(user){
@@ -57,16 +63,28 @@ class Login{
 
 	SignIn(){
 		let username = $("#Username").val(),
-				password = $("#Password").val(),
-				modal = document.getElementById('loginModal'),
-				self = this;
+			password = $("#Password").val(),
+			loginModal,
+			self = this,
+			mBuilder = new ModalBuilder(),
+			inlinePromise,
+			SucessPromise;
+	
 		if( username.length > 0 &&  password.length > 0){
-			modal.style.display = "block";
-			let success = self.authenticate(username,password);
-			success.done(function(){
+			inlinePromise = mBuilder.CreateModal('loginModal', Modal.LoginModal, 'loginModal', _.LoginModal);
+			inlinePromise.done(function(result){
+				if(result !== undefined){
+					loginModal = result;
+					loginModal.ShowModal();
+				}
+			}).fail(function(){
+
+			});
+			SucessPromise = self.authenticate(username,password);
+			SucessPromise.done(function(){
 				route(_.overview);
 			}).fail(function(){
-				modal.style.display = "none";
+				loginModal.HideModal();
 				$("#InvalidCred").removeAttr('hidden');
 				console.log("wrong user and pass");
 			});

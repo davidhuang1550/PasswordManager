@@ -9,6 +9,7 @@ let _ 		   = require("/Users/davidhuang/Desktop/Repositories/PasswordManager/src
 ;
 /**
  * loading different partial views with its assoiciated js files
+ *@param the path of the partial view
 **/
 function route(path){
 	let inlinePromise;
