@@ -35,7 +35,6 @@ class Login{
 
 	InitializeListeners(){
 		let self = this;
-
 		$("#Username").keyup("input", function(){
 			self.checkFields();
 		});

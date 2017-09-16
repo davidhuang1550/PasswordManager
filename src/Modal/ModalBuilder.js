@@ -3,7 +3,8 @@ let Modal                   = require(_.path + 'src/ModalNames'),
     PasswordCreationModal   = require(_.path + 'src/Modal/PasswordCreationModal'),
     PromptForPassword       = require(_.path + 'src/Modal/PromptForPassword'),
     PasswordErrorModal      = require(_.path + 'src/Modal/PasswordErrorModal'),
-    HistoryModal            = require(_.path + 'src/Modal/HistoryModal');
+    HistoryModal            = require(_.path + 'src/Modal/HistoryModal'),
+    PasswordChangeModal     = require(_.path + 'src/Modal/PasswordChangeModal');
 class ModalBuilder {
     constructor(){
     }
@@ -36,6 +37,10 @@ class ModalBuilder {
                     break;
                 case Modal.HistoryModal:
                     modalObj = new HistoryModal(modal);
+                    break;
+                case Modal.PasswordChangeModal:
+                    modalObj = new PasswordChangeModal(modal);
+                    modalObj.InitializeListeners();
                     break;
                 default:
                     console.log("Modal not found");

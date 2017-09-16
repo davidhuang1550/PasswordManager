@@ -32,7 +32,7 @@ class PasswordCreationModal extends Modal {
                 let inlinePromise = self._oAdditonalInformation.InitializeListeners();
 
                 inlinePromise.done(function(){
-                        self._oPasswordCreationManager.ResetFields();
+                    //    self._oPasswordCreationManager.ResetFields();
                         self.HideModal();
                 }).fail(function(){
 

@@ -1,5 +1,7 @@
 
- let PasswordCreationManager  = require(_.path + 'src/PasswordCreationManager');
+ let PasswordCreationManager  = require(_.path + 'src/PasswordCreationManager'),
+     ModalBuilder             = require(_.path + 'src/Modal/ModalBuilder'),
+     Modal                    = require(_.path + 'src/ModalNames');
  class PasswordInformationPanel{
 
  	constructor(pass){
@@ -44,11 +46,16 @@
 		  dataType: "text",
 		  success: function(response){
 				self._password._password = response;
+                $("#loading-component").remove();
+    			$("#right-panel").removeClass('main-content-blur');
 		   // console.log(response);
 
 		  },
 		  error: function(error){
 		    console.log(error);
+            $("#loading-component").remove();
+            $("#right-panel").removeClass('main-content-blur');
+
 		  }
 		});
 
@@ -68,27 +75,21 @@
 
  	InitializeListeners(){
  		// this page should be blank and loaded in with ajax then manipulated with data each time
- 		let self = this;
+ 		let self = this,
+            mBuilder = new ModalBuilder();
+
  		$("#editmode").click(function(){
  			self.EditMode();
  		});
 		self.SetView();
  		$("#change-password").click(function(){
- 			let inlinePromise = CommonAjax.GetPartialView(_.passwordchange);
+            let inlinePromise = mBuilder.CreateModal('passwordChangeModal',Modal.PasswordChangeModal, 'modal-container', _.passwordChangeModal);
  			inlinePromise.done(function(result){
- 				$("#modal-container").append(result);
- 				self._PasswordCreationManager = new PasswordCreationManager("#modal-container");
- 				self._PasswordCreationManager.InitializeListeners();
-
- 				let modal = document.getElementById('passwordChangeModal');
-
- 				modal.style.display = "block";
-
- 				$("#right-panel").find("#main-content-close").click(function(){
- 					modal.style.display = "none";
- 					$("#modal-container").empty();
-				});
-
+                if(result !== undefined){
+                    result.ShowModal();
+     				self._PasswordCreationManager = new PasswordCreationManager("#modal-container");
+     				self._PasswordCreationManager.InitializeListeners();
+                }
  			});
  			// renenter master password then prompt to changing modal
  	});

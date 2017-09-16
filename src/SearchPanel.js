@@ -95,6 +95,7 @@ class SearchPanel{
 
 			self._li = self._ul.getElementsByTagName('li');
 			$("#loading-component").remove();
+			$("#main-content").removeClass('main-content-blur');
 		}).fail(function(){
 
 		});
@@ -107,9 +108,15 @@ class SearchPanel{
 
 				inlinePromise = mBuilder.CreateModal('promptForPassword', Modal.PromptForPassword, 'promptForPassword', _.PromptForPassword);
 				inlinePromise.done(function(result){
+					let passwordPromise;
 					if(result !== undefined){
 						promptForPassword = result;
-						promptForPassword.ShowModal();
+						passwordPromise = promptForPassword.ShowModal();
+						passwordPromise.done(function(){
+							
+						}).fail(function(reason){
+							self.GenerateRightSide(passwordItem);
+						});
 					}
 				}).fail(function(){
 

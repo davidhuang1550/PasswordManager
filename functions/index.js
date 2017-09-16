@@ -800,6 +800,14 @@ function checkInt(value) {
 
    exports.encrypt = functions.database.ref('/users/{userId}/passwords/{passwordId}/temppassword')
        .onWrite(event => {
+
+         if (event.data.previous.exists()) {
+             return;
+         }
+         // Exit when the data is deleted.
+         if (!event.data.exists()) {
+             return;
+         }
          // Grab the current value of what was written to the Realtime Database.
          const original = event.data.val();
          console.log(original);
