@@ -6,10 +6,13 @@ class HistoryModal extends Modal{
         super(modalObj);
     }
 
-    InitializeListeners(targetDiv){
+    /**
+    * @param args[0] targetDiv to populate from.
+    */ 
+    InitializeListeners(args){
         let self = this;
 
-        this._targetDiv = targetDiv;
+        this._targetDiv = args[0];
 
         $(this._targetDiv).find("#history-content-close").click(function(){
             self.HideModal();

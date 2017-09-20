@@ -13,7 +13,7 @@ class ModalBuilder {
     *@param typeModal the type of modal to instaniate and initialize its listeners
     *@param loadInto the div inwhich we will load the ajax modal into.
     */
-    CreateModal(modalName, typeModal, loadInto, partialView){
+    CreateModal(modalName, typeModal, loadInto, partialView, ...args){
         let modal,
             modalObject = $.Deferred(),
             inlinePromise;
@@ -33,14 +33,14 @@ class ModalBuilder {
                     modalObj.InitializeListeners();
                     break;
                 case Modal.PasswordErrorModal:
-                    modalObj = new PasswordErrorModal(modal);
+                    modalObj = new PasswordErrorModal(modal, args);
                     break;
                 case Modal.HistoryModal:
-                    modalObj = new HistoryModal(modal);
+                    modalObj = new HistoryModal(modal, args);
                     break;
                 case Modal.PasswordChangeModal:
-                    modalObj = new PasswordChangeModal(modal);
-                    modalObj.InitializeListeners();
+                    modalObj = new PasswordChangeModal(modal, args);
+                    //modalObj.InitializeListeners();
                     break;
                 default:
                     console.log("Modal not found");

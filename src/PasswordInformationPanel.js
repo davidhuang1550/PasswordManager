@@ -7,23 +7,36 @@
  	constructor(pass){
  		this._PasswordCreationManager;
  		this._password = pass;
+        this._editMode = false;
+        this._editPasswordModal;
  	}
 
  	EditMode(){
-
- 		if($("#editmode").hasClass("fa-floppy-o")){
- 			// obviously do validation before saving anything
- 			$("#editmode").removeClass("fa-floppy-o");
- 			$("#editmode").addClass("fa-pencil");
- 			$(".form-control-editable").attr("readonly",true);
- 			$("#change-password").addClass("hidden");
-
- 		} else {
- 			$("#editmode").removeClass("fa-pencil");
- 			$("#editmode").addClass("fa-floppy-o");
- 			$(".form-control-editable").attr("readonly",false);
- 			$("#change-password").removeClass("hidden");
- 		}
+        let self = this;
+        //if(this._editMode === false) {
+     		if($("#editmode").hasClass("fa-floppy-o")){
+     			// obviously do validation before saving anything
+     			$("#editmode").removeClass("fa-floppy-o");
+     			$("#editmode").addClass("fa-pencil");
+     			$(".form-control-editable").attr("readonly",true);
+     			$("#change-password").addClass("hidden");
+                let user = firebase.auth().currentUser.uid;
+                if(this._editPasswordModal !== undefined && this._editPasswordModal.newPassword !== undefined){
+                    this._password.password = this._editPasswordModal.newPassword;
+                    this._password.description = $('#description').val();
+                    firebase.database().ref('users/'+user+'/passwords/'+ self._password.key).set({
+                        temppassword : self._password.password,
+                        description  : self._password.description,
+                        title        : self._password.title,
+                        secure       : self._password.secure
+                    });
+                }
+     		} else {
+     			$("#editmode").removeClass("fa-pencil");
+     			$("#editmode").addClass("fa-floppy-o");
+     			$(".form-control-editable").attr("readonly",false);
+     			$("#change-password").removeClass("hidden");
+     		}
  	}
 
  	SetView(){
@@ -73,6 +86,12 @@
  		}
  	}
 
+    ChangePasswordField(password){
+        if ($('#invidiualPassword').get(0).type !== 'password'){
+ 			$('#invidiualPassword').val(password);
+        }
+    }
+
  	InitializeListeners(){
  		// this page should be blank and loaded in with ajax then manipulated with data each time
  		let self = this,
@@ -83,16 +102,17 @@
  		});
 		self.SetView();
  		$("#change-password").click(function(){
-            let inlinePromise = mBuilder.CreateModal('passwordChangeModal',Modal.PasswordChangeModal, 'modal-container', _.passwordChangeModal);
+            let inlinePromise = mBuilder.CreateModal('passwordChangeModal',Modal.PasswordChangeModal, 'modal-container', _.passwordChangeModal,self._password, self.ChangePasswordField);
  			inlinePromise.done(function(result){
-                if(result !== undefined){
-                    result.ShowModal();
+                self._editPasswordModal = result;
+                if(self._editPasswordModal !== undefined){
+                    self._editPasswordModal.ShowModal();
      				self._PasswordCreationManager = new PasswordCreationManager("#modal-container");
      				self._PasswordCreationManager.InitializeListeners();
                 }
  			});
  			// renenter master password then prompt to changing modal
- 	});
+ 	    });
  		$("#show-password-single").click(function() {
  			if ($('#invidiualPassword').get(0).type == 'password'){
  				$('#invidiualPassword').val(self._password._password);
@@ -110,19 +130,15 @@
  			   $temp.val(self._password._password).select();
  			   document.execCommand("copy");
  			   $temp.remove();
+ 			   // Get the snackbar DIV
+ 			   var x = document.getElementById("snackbar")
 
- 				// Get the snackbar DIV
- 				var x = document.getElementById("snackbar")
+ 			   // Add the "show" class to DIV
+ 			   x.className = "show";
 
- 				// Add the "show" class to DIV
- 				x.className = "show";
-
- 				// After 3 seconds, remove the show class from DIV
- 				setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+ 			   // After 3 seconds, remove the show class from DIV
+ 			   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
  		});
-
-
-
  	}
  };
 

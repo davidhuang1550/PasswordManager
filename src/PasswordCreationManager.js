@@ -70,11 +70,10 @@ class PasswordCreationManager{
 			} else {
 				let inlinePromise;
 				mBuilder = new ModalBuilder();
-				inlinePromise = mBuilder.CreateModal('errorModal', Modal.PasswordErrorModal, 'errorModal', _.PasswordErrorModal);
+				inlinePromise = mBuilder.CreateModal('errorModal', Modal.PasswordErrorModal, 'errorModal', _.PasswordErrorModal,self._targetDiv);
 				inlinePromise.done(function(result){
 					if(result !== undefined){
 						self._errorModal = result;
-						self._errorModal.InitializeListeners(self._targetDiv);
 						self._errorModal.ShowModal();
 					}
 				}).fail(function(){
@@ -145,11 +144,10 @@ class PasswordCreationManager{
 				historyModal.ShowModal();
 			} else {
 				let inlinePromise;
-				inlinePromise = mBuilder.CreateModal('historyModal', Modal.HistoryModal, 'historyModal', _.HistoryModal);
+				inlinePromise = mBuilder.CreateModal('historyModal', Modal.HistoryModal, 'historyModal', _.HistoryModal, self._targetDiv);
 				inlinePromise.done(function(result){
 					if(result !== undefined){
 						historyModal = result;
-						historyModal.InitializeListeners(self._targetDiv);
 						self.PopulateHistory();
 						historyModal.ShowModal();
 					}

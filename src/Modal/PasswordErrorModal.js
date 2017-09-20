@@ -6,9 +6,12 @@ class PasswordErrorModal extends Modal{
         super(modalObj);
     }
 
-    InitializeListeners(targetDiv){
+    /**
+    * @param args[0] targetDiv to populate from.
+    */ 
+    InitializeListeners(args){
         let self = this;
-        this._targetDiv = targetDiv;
+        this._targetDiv = args[0];
         $(this._targetDiv).find("#closeError").click(function(){
             self.HideModal();
         });

@@ -38,7 +38,7 @@ class SearchPanel{
 	LoadPanelContent(){
 		let self = this,
 			inlinePromise = $.Deferred();
-		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').once('value', function(snapshot) {
+		  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').once('value', function(snapshot) {
 		  snapshot.forEach(function(childSnapshot) {
 			var childKey = childSnapshot.key;
 			self._Passwords.push(new Password( childKey,
@@ -73,6 +73,32 @@ class SearchPanel{
 			console.log("fail downloading");
 		});
 	}
+	
+	OnChildAdded(){
+		let self = this,
+			skipOne = false;
+		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').on("child_added", function(snapshot, prevChildKey){
+			if(skipOne) {
+				let password = snapshot.val();
+				self._Passwords.push(new Password( password.key,
+												   password.password,
+												   password.secure,
+												   password.keyVal,
+												   password.description,
+												   password.title
+												   ));
+				self.AddRow(password, self._Passwords.length -1);
+			} else {
+				skipeOne = true;
+			}
+		});
+	}
+
+	AddRow(password, x) {
+		let secureIcon = (password.secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
+		$("#ulId").append('<li class="list-group-item" id="' + x + '">' + secureIcon + password.title + '</li>');
+	}
+
 
 	InitializeListeners(){
 		// this goes here for now but should be invoked once a item is selected and should only be invoked once ine the lifespan of the program
@@ -88,14 +114,13 @@ class SearchPanel{
 				self._Passwords[0].title + '</li>');
 			}
 			for(let x = 1; x <self._Passwords.length; x++){
-				let secureIcon = (self._Passwords[x].secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
-				$("#ulId").append('<li class="list-group-item" id="' + x + '">' + secureIcon +
-				self._Passwords[x].title + '</li>');
+				self.AddRow(self._Passwords[x], x);
 			}
 
 			self._li = self._ul.getElementsByTagName('li');
 			$("#loading-component").remove();
 			$("#main-content").removeClass('main-content-blur');
+			self.OnChildAdded();
 		}).fail(function(){
 
 		});
@@ -119,7 +144,7 @@ class SearchPanel{
 						});
 					}
 				}).fail(function(){
-
+					console.log("cannot fetch prompt for password modal");
 				});
 			} else {
 				self.GenerateRightSide(passwordItem);
