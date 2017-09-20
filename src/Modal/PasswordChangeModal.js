@@ -18,7 +18,7 @@ class PasswordChangeModal extends Modal{
     InitializeListeners(args){
         let self = this,
             password = args[0],
-            ChangePasswordField = args[1];
+            callback = args[1];
         $("#right-panel").find("#main-content-close").click(function(){
             self.HideModal();
             $("#modal-container").empty();
@@ -27,7 +27,7 @@ class PasswordChangeModal extends Modal{
         $("#right-panel").find("#UpdatePasswordBtn").click(function(){
             let newPassword = $("#right-panel").find("#generatedPassword").val();
             self._newPassword = newPassword;
-            ChangePasswordField(newPassword);
+            callback.ChangePasswordField(newPassword);
             self.HideModal();
         });
     }

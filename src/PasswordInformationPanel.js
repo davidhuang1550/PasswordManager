@@ -87,8 +87,11 @@
  	}
 
     ChangePasswordField(password){
+
         if ($('#invidiualPassword').get(0).type !== 'password'){
  			$('#invidiualPassword').val(password);
+        } else {
+            this._password._password = password;
         }
     }
 
@@ -102,7 +105,7 @@
  		});
 		self.SetView();
  		$("#change-password").click(function(){
-            let inlinePromise = mBuilder.CreateModal('passwordChangeModal',Modal.PasswordChangeModal, 'modal-container', _.passwordChangeModal,self._password, self.ChangePasswordField);
+            let inlinePromise = mBuilder.CreateModal('passwordChangeModal',Modal.PasswordChangeModal, 'modal-container', _.passwordChangeModal,self._password, self);
  			inlinePromise.done(function(result){
                 self._editPasswordModal = result;
                 if(self._editPasswordModal !== undefined){

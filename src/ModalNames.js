@@ -1,7 +1,7 @@
 let Modal = {
     PasswordModal       : "PasswordModal",
     PromptForPassword   : "PromptForPassword",
-    ErrorPasswordModal  : "ErrorPasswordModal",
+    PasswordErrorModal  : "PasswordErrorModal",
     HistoryModal        : "HistoryModal",
     LoginModal          : "LoginModal",
     PasswordChangeModal : "PasswordChangeModal"

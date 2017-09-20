@@ -1,4 +1,4 @@
-let Modal = require(_.path + 'src/Moda/Modal');
+let Modal = require(_.path + 'src/Modal/Modal');
 
 class LoginModal extends Modal{
     

@@ -4,7 +4,8 @@ let Modal                   = require(_.path + 'src/ModalNames'),
     PromptForPassword       = require(_.path + 'src/Modal/PromptForPassword'),
     PasswordErrorModal      = require(_.path + 'src/Modal/PasswordErrorModal'),
     HistoryModal            = require(_.path + 'src/Modal/HistoryModal'),
-    PasswordChangeModal     = require(_.path + 'src/Modal/PasswordChangeModal');
+    PasswordChangeModal     = require(_.path + 'src/Modal/PasswordChangeModal'),
+    LoginModal              = require(_.path + 'src/Modal/LoginModal');
 class ModalBuilder {
     constructor(){
     }
@@ -22,6 +23,7 @@ class ModalBuilder {
         inlinePromise.done(function(result){
             $('#' + loadInto).html(result);
             let modalObj;
+        
             modal = document.getElementById(modalName);
             switch(typeModal){
                 case Modal.PasswordModal:
@@ -33,15 +35,21 @@ class ModalBuilder {
                     modalObj.InitializeListeners();
                     break;
                 case Modal.PasswordErrorModal:
-                    modalObj = new PasswordErrorModal(modal, args);
+                    modalObj = new PasswordErrorModal(modal);
+                    modalObj.InitializeListeners(args);
                     break;
                 case Modal.HistoryModal:
-                    modalObj = new HistoryModal(modal, args);
+                    modalObj = new HistoryModal(modal);
+                    modalObj.InitializeListeners(args);
                     break;
                 case Modal.PasswordChangeModal:
-                    modalObj = new PasswordChangeModal(modal, args);
+                    modalObj = new PasswordChangeModal(modal);
+                    modalObj.InitializeListeners(args);
                     //modalObj.InitializeListeners();
                     break;
+                case Modal.LoginModal:
+                    modalObj = new LoginModal(modal);
+                    modalObj.InitializeListeners();
                 default:
                     console.log("Modal not found");
 

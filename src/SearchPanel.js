@@ -77,26 +77,34 @@ class SearchPanel{
 	OnChildAdded(){
 		let self = this,
 			skipOne = false;
-		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').on("child_added", function(snapshot, prevChildKey){
-			if(skipOne) {
-				let password = snapshot.val();
+		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').limitToLast(1).on("child_added", function(snapshot, prevChildKey){
+			let password = snapshot.val();
+			if(skipOne){
 				self._Passwords.push(new Password( password.key,
 												   password.password,
-												   password.secure,
-												   password.keyVal,
+											       password.secure,
+											       password.keyVal,
 												   password.description,
 												   password.title
-												   ));
+													   ));
 				self.AddRow(password, self._Passwords.length -1);
-			} else {
-				skipeOne = true;
+			} else{
+				skipOne = true;
 			}
 		});
 	}
 
 	AddRow(password, x) {
-		let secureIcon = (password.secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
-		$("#ulId").append('<li class="list-group-item" id="' + x + '">' + secureIcon + password.title + '</li>');
+		let secureIcon;
+		if(x == 0) {
+			secureIcon = (password.secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
+			$("#ulId").append('<li class="list-group-item" style="border:0 none;" id="' + 0 + '">' + secureIcon +
+			password.title + '</li>');
+		} else {
+			let secureIcon = (password.secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
+			$("#ulId").append('<li class="list-group-item" id="' + x + '">' + secureIcon + password.title + '</li>');
+
+		}
 	}
 
 
@@ -108,19 +116,14 @@ class SearchPanel{
  			mBuilder = new ModalBuilder();
 
 		inlinePromise.done(function(){
-			if(self._Passwords[0] != null){
-				let secureIcon = (self._Passwords[0].secure) ? '<i class="fa fa-lock" aria-hidden="true" style="float:right;padding-top:2px;"></i>' :"" ;
-				$("#ulId").append('<li class="list-group-item" style="border:0 none;" id="' + 0 + '">' + secureIcon +
-				self._Passwords[0].title + '</li>');
+			let passwordLength;
+			for(let x = 0,passwordLength = self._Passwords.length; x<passwordLength; x++){
+				self.AddRow(self._Passwords[x],x);
 			}
-			for(let x = 1; x <self._Passwords.length; x++){
-				self.AddRow(self._Passwords[x], x);
-			}
-
+			self.OnChildAdded();
 			self._li = self._ul.getElementsByTagName('li');
 			$("#loading-component").remove();
 			$("#main-content").removeClass('main-content-blur');
-			self.OnChildAdded();
 		}).fail(function(){
 
 		});

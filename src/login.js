@@ -1,5 +1,5 @@
 let ModalBuilder = require(_.path + 'src/Modal/ModalBuilder'),
-	Modal		 = require(_.path + 'src/Modal/Modal');
+	Modal		 = require(_.path + 'src/ModalNames');
 
 class Login{
 
