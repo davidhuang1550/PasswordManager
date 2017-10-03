@@ -58,8 +58,20 @@
 }
 .left-panel {
 	height:93%;
+    color:white;
+    border: 0 none;
+    margin-left:10px;
 	overflow-y: auto;
 }
+
+.password-change-group{
+    width:450px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
 .left-panel li{
   background-color:#394d68;
   border-left:0 none;
@@ -110,10 +122,22 @@
 
 .list-group-item-password:hover{
 	cursor:pointer;
-  color: white;
+    color: white;
 	background-color:#394d68;
 }
 
+.login-background #InvalidCred {
+    color:red;
+    text-align:center;
+}
+.login-background .middle .fa-lock {
+    color:white;
+    padding-bottom:50px;
+}
+
+.login-background label{
+    color:white;
+}
 .search-field{
 	border: none;
 	background: transparent;
@@ -186,7 +210,7 @@
   border: 1px solid #888;
   overflow-y:hidden;
   width: 400px; /* Could be more or less, depending on screen size */
-  height: 200px;
+  height: 250px;
 }
 
 .inner-modal {

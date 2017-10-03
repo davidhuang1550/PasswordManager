@@ -1,7 +1,7 @@
-let PasswordInformationPanel = require(_.path + 'src/PasswordInformationPanel'),
-	Password 			     = require(_.path + 'src/models/Password'),
-	ModalBuilder			 = require(_.path + 'src/Modal/ModalBuilder'),
-	Modal                    = require(_.path + 'src/ModalNames');
+let PasswordInformationPanel = require(_.PasswordInformationPanelScript),
+	Password 			     = require(_.PasswordScript),
+	ModalBuilder			 = require(_.ModalBuilder),
+	Modal                    = require(_.ModalNames);
 class SearchPanel{
 	constructor(input, ul , li){
 		this._input = input;
@@ -38,8 +38,8 @@ class SearchPanel{
 	LoadPanelContent(){
 		let self = this,
 			inlinePromise = $.Deferred();
-		  firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').once('value', function(snapshot) {
-		  snapshot.forEach(function(childSnapshot) {
+		    firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').once('value', function(snapshot) {
+		    snapshot.forEach(function(childSnapshot) {
 			var childKey = childSnapshot.key;
 			self._Passwords.push(new Password( childKey,
 											   childSnapshot.child('password').val(),
@@ -77,23 +77,37 @@ class SearchPanel{
 	OnChildAdded(){
 		let self = this,
 			skipOne = false;
-		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').limitToLast(1).on("child_added", function(snapshot, prevChildKey){
-			let password = snapshot.val();
+		firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/passwords').limitToLast(1).on("child_changed", function(snapshot, prevChildKey){
+			let password = snapshot.val(),
+				updateToexsisting = undefined,
+				newPassword;
 			if(skipOne){
-				self._Passwords.push(new Password( password.key,
+				for(var x = 0; x<self._Passwords.length ; x++){
+					if(password.key == self._Passwords[x].key) updateToexsisting = x;
+				}
+				newPassword = new Password( password.key,
 												   password.password,
 											       password.secure,
 											       password.keyVal,
 												   password.description,
 												   password.title
-													   ));
-				self.AddRow(password, self._Passwords.length -1);
+													   );
+				if(updateToexsisting === undefined){
+					self._Passwords.push(newPassword);
+					self.AddRow(password, self._Passwords.length -1);
+				} else {
+					self._Passwords[updateToexsisting] = newPassword;
+				}
 			} else{
 				skipOne = true;
 			}
 		});
 	}
 
+	/**
+	*@param password object specifically for secure and title
+	*@param counter to uniquely identify each row.
+	**/
 	AddRow(password, x) {
 		let secureIcon;
 		if(x == 0) {
@@ -141,9 +155,9 @@ class SearchPanel{
 						promptForPassword = result;
 						passwordPromise = promptForPassword.ShowModal();
 						passwordPromise.done(function(){
-							
-						}).fail(function(reason){
 							self.GenerateRightSide(passwordItem);
+						}).fail(function(reason){
+
 						});
 					}
 				}).fail(function(){

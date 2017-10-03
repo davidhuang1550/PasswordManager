@@ -1,7 +1,7 @@
-let GeneratePassword = require(_.path + 'src/GeneratePassword'),
-	WordGenerate     = require(_.path + 'src/WordGenerate'),
-	ModalBuilder	 = require(_.path + 'src/Modal/ModalBuilder'),
-	Modal			 = require(_.path + 'src/ModalNames');
+let GeneratePassword = require(_.GeneratePasswordScript),
+	WordGenerate     = require(_.WordGenerateScript),
+	ModalBuilder	 = require(_.ModalBuilder),
+	Modal			 = require(_.ModalNames);
 
 class PasswordCreationManager{
 	constructor(targetDiv){

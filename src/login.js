@@ -1,5 +1,5 @@
-let ModalBuilder = require(_.path + 'src/Modal/ModalBuilder'),
-	Modal		 = require(_.path + 'src/ModalNames');
+let ModalBuilder = require(_.ModalBuilder),
+	Modal		 = require(_.ModalNames);
 
 class Login{
 
@@ -75,18 +75,19 @@ class Login{
 				if(result !== undefined){
 					loginModal = result;
 					loginModal.ShowModal();
+					SucessPromise = self.authenticate(username,password);
+					SucessPromise.done(function(){
+						route(_.overview);
+					}).fail(function(){
+						loginModal.HideModal();
+						$("#InvalidCred").removeAttr('hidden');
+						console.log("wrong user and pass");
+					});
 				}
 			}).fail(function(){
 
 			});
-			SucessPromise = self.authenticate(username,password);
-			SucessPromise.done(function(){
-				route(_.overview);
-			}).fail(function(){
-				loginModal.HideModal();
-				$("#InvalidCred").removeAttr('hidden');
-				console.log("wrong user and pass");
-			});
+			
 
 		}
 	}

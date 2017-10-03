@@ -1,7 +1,7 @@
-let SearchPanel 			 = require(_.path + 'src/SearchPanel'),
-	PasswordCreationManager  = require(_.path + 'src/PasswordCreationManager'),
-	ModalBuilder			 = require(_.path + 'src/Modal/ModalBuilder'),
-	Modal                    = require(_.path + 'src/ModalNames');
+let SearchPanel 			 = require(_.SearchPanelScript),
+	PasswordCreationManager  = require(_.PasswordCreationManager),
+	ModalBuilder			 = require(_.ModalBuilder),
+	Modal                    = require(_.ModalNames);
 
 class Overview{
 	constructor(){

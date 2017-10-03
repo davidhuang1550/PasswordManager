@@ -1,11 +1,11 @@
-let Modal                   = require(_.path + 'src/ModalNames'),
-    CommonAJax              = require(_.path + 'src/CommonAjax'),
-    PasswordCreationModal   = require(_.path + 'src/Modal/PasswordCreationModal'),
-    PromptForPassword       = require(_.path + 'src/Modal/PromptForPassword'),
-    PasswordErrorModal      = require(_.path + 'src/Modal/PasswordErrorModal'),
-    HistoryModal            = require(_.path + 'src/Modal/HistoryModal'),
-    PasswordChangeModal     = require(_.path + 'src/Modal/PasswordChangeModal'),
-    LoginModal              = require(_.path + 'src/Modal/LoginModal');
+let Modal                   = require(_.ModalNames),
+    CommonAJax              = require(_.CommonAjax),
+    PasswordCreationModal   = require(_.PasswordCreationModalScript),
+    PromptForPassword       = require(_.PromptForPasswordScript),
+    PasswordErrorModal      = require(_.PassworderrorModalScript),
+    HistoryModal            = require(_.HistoryModalScript),
+    PasswordChangeModal     = require(_.PasswordChangeModalScript),
+    LoginModal              = require(_.LoginModalScript);
 class ModalBuilder {
     constructor(){
     }

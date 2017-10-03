@@ -1,12 +1,13 @@
 
 let _ 		   = require("/Users/davidhuang/Desktop/Repositories/PasswordManager/src/path.js"),
-   CommonAjax  = require(_.path + 'src/CommonAjax'),
-   Login       = require(_.path + 'src/login'),
-   Overview    = require(_.path + 'src/overview'),
+   CommonAjax  = require(_.CommonAjax),
+   Login       = require(_.LoginScript),
+   Hash        = require(_.HashFunction),
+   Overview    = require(_.OverViewScript),
    csv 		   = [],
    allLoaded   = false,
    defaultDatabase = firebaseApp.database();
-;
+
 /**
  * loading different partial views with its assoiciated js files
  *@param the path of the partial view
@@ -17,19 +18,19 @@ function route(path){
 	inlinePromise.done(function(result){
 		switch(path){
 			case _.login:
-      	$("body").html(result);
+      	        $("body").html(result);
 				Login.InitializeListeners();
 				break;
 			case _.overview:
-      	$("body").html(result);
+      	        $("body").html(result);
 				let oOverviewObj = new Overview();
 				oOverviewObj.InitializeListeners();
 				break;
-      case _.signup:
-        $("body").append(result);
-        let signUp = require(_.path + 'src/signup');
-        signUp.InitializeListeners();
-        break;
+            case _.signup:
+                $("body").append(result);
+                let signUp = require(_.SignUpScript);
+                signUp.InitializeListeners();
+                break;
 			default:
 				//404 error
 				break;
@@ -63,24 +64,6 @@ function loadCsv(){
 	});
 
 }
-/*//load login first
-firebase.database().ref('messages/').set({
-  password: "password"
-});
-*/
-/*$.ajax({
-  url: "https://us-central1-passwordmanager-86755.cloudfunctions.net/decrypt",
-  type: "POST",
-  data: {"hash":"a338eda3874ed884b6199150d36f49988c90f5c47fe7792b0cf8c7f77eeffd87ea145b73e82aefcf2076f881c88879e4e25b1d7b24ba2788"},
-  dataType: "text",
-  success: function(response){
-    console.log(response);
-
-  },
-  error: function(error){
-    console.log(error);
-  }
-});*/
 
 route(_.login);
 loadCsv();

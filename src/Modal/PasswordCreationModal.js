@@ -1,5 +1,5 @@
-let  AdditonalInformation = require(_.path + 'src/AdditionalInformation'),
-     Modal                = require(_.path + 'src/Modal/Modal');
+let  AdditonalInformation = require(_.AdditionalInformationScript),
+     Modal                = require(_.ModalScript);
 
 class PasswordCreationModal extends Modal {
 

@@ -1,4 +1,4 @@
-let Modal = require(_.path + 'src/Modal/Modal');
+let Modal = require(_.ModalScript);
 
 class HistoryModal extends Modal{
 

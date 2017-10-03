@@ -1,7 +1,7 @@
 
- let PasswordCreationManager  = require(_.path + 'src/PasswordCreationManager'),
-     ModalBuilder             = require(_.path + 'src/Modal/ModalBuilder'),
-     Modal                    = require(_.path + 'src/ModalNames');
+ let PasswordCreationManager  = require(_.PasswordCreationManager),
+     ModalBuilder             = require(_.ModalBuilder),
+     Modal                    = require(_.ModalNames);
  class PasswordInformationPanel{
 
  	constructor(pass){
@@ -86,6 +86,9 @@
  		}
  	}
 
+    /**
+    *@param password object
+    */
     ChangePasswordField(password){
 
         if ($('#invidiualPassword').get(0).type !== 'password'){
